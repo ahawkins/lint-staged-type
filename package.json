@@ -1,12 +1,15 @@
 {
-	"name": "lint-staged-pipeline",
+	"name": "lint-staged-type",
 	"version": "0.1.0",
 	"description": "Run lint commands against file types",
-	"main": "index.js",
-	"repository": "https://github.com/ahawkins/lint-staged-pipeline",
+	"main": "lib/index.js",
+	"repository": "https://github.com/ahawkins/lint-staged-type",
 	"author": "Adam Hawkins",
 	"license": "MIT",
 	"private": false,
+	"bin": {
+		"lint-staged-type-error": "bin/lint-staged-type-error"
+	},
 	"devDependencies": {
 		"husky": "^4.3.0",
 		"jest": "^26.6.3",
@@ -21,10 +24,21 @@
 		}
 	},
 	"dependencies": {
+		"chalk": "^4.1.0",
 		"cosmiconfig": "^7.0.0",
+		"debug": "^4.3.1",
 		"micromatch": "^4.0.2"
 	},
 	"scripts": {
 		"test": "jest"
+	},
+	"lint-staged-type": {
+		"linters": {
+			"shell": {
+				"command": "shellcheck",
+				"match": "*.sh",
+				"shebang": "!#/usr/bin/env bash"
+			}
+		}
 	}
 }

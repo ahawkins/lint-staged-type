@@ -1,15 +1,16 @@
-const lintStagedPipeline = require("./lib");
+const lintStagedType = require("./lib");
+const micromatch = require("micromatch");
 
-module.exports = (stagedFiles) => {
-	const commands = lintStagedPipeline(stagedFiles, {
-		linters: {
-			shell: {
-				command: "shellcheck",
-				match: "*.sh",
-				shebangs: ["!#/usr/bin/env bash"],
-			},
-		},
-	});
+module.exports = async (stagedFiles) => {
+	// Run linters for all matching file types
+	const commands = await lintStagedType(stagedFiles);
+
+	// Run modified tests
+	const tests = micromatch(stagedFiles, ["**/*.test.js"]);
+
+	if (tests.length) {
+		commands.push(`yarn test ${tests.join(" ")}`);
+	}
 
 	// Test files covered by editorconfig
 	commands.push(`script/lint-editorconfig ${stagedFiles.join(" ")}`);
