@@ -7,9 +7,6 @@
 	"license": "MIT",
 	"author": "Adam Hawkins",
 	"main": "lib/index.js",
-	"bin": {
-		"lint-staged-type-unknown-linter": "bin/lint-staged-type-unknown-linter"
-	},
 	"scripts": {
 		"test": "jest",
 		"test:debug": "env DEBUG=lint-staged-type jest"
