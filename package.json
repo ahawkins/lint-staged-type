@@ -37,7 +37,7 @@
 		"strict": true,
 		"ignore": [
 			"*.md",
-			".github/workflows.yml"
+			".github/workflows/*.yml"
 		],
 		"linters": {
 			"package": {
