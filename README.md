@@ -8,7 +8,7 @@ easier ignore support.
 ### Step 1: Install
 
 ```
-yarn add lint-staged-type
+yarn add -D lint-staged-type
 ```
 
 ### Step 2: Add lint-staged-type to lint-staged
@@ -37,6 +37,10 @@ module.exports = async (stagedFiles) => {
 EOF
 ```
 
+**IMPORTANT**: You must remove existing `lint-staged` configuration
+from `package.json` for this to work. Rewrite existing rules in
+Javascript as seen above.
+
 ### Step 3: Configure lint-staged-type
 
 `lint-staged-type` uses [cosmiconfig][]. Add a `lint-staged-type` to
@@ -50,8 +54,8 @@ EOF
         "command": "shellcheck",
         "match": "*.sh",
         "shebang": [
-          "!#/usr/bin/env bash",
-          "!#/bin/bash
+          "#!/usr/bin/env bash",
+          "#!/bin/bash
         ]
       }
     }
@@ -64,23 +68,23 @@ This example runs `shellcheck` for any file matching `*.sh` or with a
 
 :checkered_flag::checkered_flag: You're done with the basic setup!
 
-Continue to add more linters for the various file types in your
-project. You can also add more commands after `lint-staged-type` by
-writing JavaScript in `lint-staged.config.js` Here's some [examples][]
+Add more linters for file types in your project. You may add more
+commands after `lint-staged-type` by writing JavaScript in
+`lint-staged.config.js` like in these [examples][].
 
 ## Why this project?
 
-I use [lint-staged] on all my projects. It works well when it's easy
-to match files just on globs, such as `*.js`. This catch all rule hits
+I use [lint-staged] on all my projects. It works best for matching
+files using globs, such as `*.js`. This catch all rule hits
 any `*.js` file in the project, so all files will be linted before
 they're commited. All good.
 
-My project typically include shell programs which don't have extension
-or executables written in $lang that also don't have an extension. So
-you can't use glob matchers for these. You have to specify a glob rule
-that matches these files expliclity. As a result, people working on
-the project must remember to add new files to the linting rules. This
-does not happen in practice.
+My projects typically include shell programs which don't have
+extension or executables written in $lang that also don't have an
+extension. So you can't use glob matchers for these. The workaround is
+specifying a glob rule that matches these files expliclity. As a
+result, people working on the project must remember to add new files
+to the linting rules. This does not happen in practice.
 
 I use [prettier][] for my projects too. So I'd have a rule like:
 
@@ -92,10 +96,10 @@ I use [prettier][] for my projects too. So I'd have a rule like:
 
 in the `lint-staged` config. This rule ensured that _every_ file in
 the commit would be properly formatted. If a file was not supported,
-then `prettier` would error. That meant that new files must work with
-prettier or they must be explicitly ignored (by adding to
-`.prettierignore). This workflow put every file in SCM would
-go through prettier, thus ensuring consistency across the codebase.
+then `prettier` fails. That forces configuring prettier to support new
+files or explicitly ignore them (by adding them to `.prettierignore`).
+This workflow ensures every file in SCM go through prettier, thus
+ensuring consistency across the codebase.
 
 So I want something similar for linting that was globally configured
 then opt-out as opposed to opt-in.
@@ -153,18 +157,41 @@ Using `package.json`:
 ```
 {
   "lint-staged-type": {
+    "ignore": [
+      "vendor/*
+    ],
     "linters": {
       "ruby": {
         "command": "bundle exec rubocop",
         "match": "*.rb"
-        "ignore": [
-          "vendor/*
-        ]
       }
     }
   }
 }
 ```
+
+### Example: Fail on unlinted files
+
+`lint-staged-type` includes `strict` mode. This will causing a failure
+is any staged files _do not_ match a linter.
+
+Using `package.json`:
+
+```
+{
+  "lint-staged-type": {
+    "strict": true,
+    "linters": {
+      "ruby": {
+        "command": "bundle exec rubocop",
+        "match": "*.rb"
+      }
+    }
+  }
+}
+```
+
+Now files that don't match `*.rb` will cause an error.
 
 ### Example: Using multiple globs
 

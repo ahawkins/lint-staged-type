@@ -38,6 +38,9 @@
 	},
 	"lint-staged-type": {
 		"strict": true,
+		"ignore": [
+			"*.md"
+		],
 		"linters": {
 			"package": {
 				"command": "sort-package-json",
