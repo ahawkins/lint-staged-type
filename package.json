@@ -36,7 +36,8 @@
 	"lint-staged-type": {
 		"strict": true,
 		"ignore": [
-			"*.md"
+			"*.md",
+			".github/workflows.yml"
 		],
 		"linters": {
 			"package": {
