@@ -37,9 +37,9 @@ module.exports = async (stagedFiles) => {
 EOF
 ```
 
-**IMPORTANT**: You must remove existing `lint-staged` configuration
-from `package.json` for this to work. Rewrite existing rules in
-Javascript as seen above.
+:warning::warning: **IMPORTANT**: You **MUST** remove existing
+`lint-staged` configuration from `package.json` for this to work.
+Rewrite existing rules in Javascript as seen above.
 
 ### Step 3: Configure lint-staged-type
 
